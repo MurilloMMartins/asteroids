@@ -4,6 +4,7 @@ project(Asteroids LANGUAGES CXX)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 
 # Fetching all the external libs we will be using
@@ -18,10 +19,9 @@ FetchContent_Declare(Catch2
   GIT_TAG        v3.4.0)
 FetchContent_MakeAvailable(Catch2)
 
-# Compiling our project
-add_executable(Asteroids src/main.cpp)
-target_link_libraries(Asteroids PRIVATE sfml-graphics)
-target_compile_features(Asteroids PRIVATE cxx_std_17)
+# Compiling project
+add_subdirectory(apps)
+add_subdirectory(src)
 
 # Compiling our tests
 add_executable(tests tests/tests.cpp)
