@@ -2,8 +2,8 @@
 
 class Asteroids {
 public:
-    Asteroids();
-    static void run();
+    Asteroids() = default;
+    void run();
 
 private:
 };

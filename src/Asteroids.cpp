@@ -1,33 +1,20 @@
+#include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Vector2.hpp>
-#include <SFML/Graphics.hpp>
+#include <SFML/Window/Keyboard.hpp>
 
 #include "Asteroids.h"
+#include "SFML/Graphics/Rect.hpp"
+#include "SFML/Graphics/View.hpp"
+#include "Ship.h"
 
 void Asteroids::run()
 {
-    sf::RenderWindow window = sf::RenderWindow { { 1920u, 1080u }, "Asteroids" };
+    sf::RenderWindow window = sf::RenderWindow { { 960u, 540u }, "Asteroids" };
     window.setFramerateLimit(144);
 
-    // create an empty shape
-    sf::ConvexShape convex;
-
-    // resize it to 4 points
-    convex.setPointCount(4);
-
-    // define the points
-    convex.setPoint(0, sf::Vector2f(0.f, 0.f));
-    convex.setPoint(1, sf::Vector2f(50.f, 100.f));
-    convex.setPoint(2, sf::Vector2f(0.f, 80.f));
-    convex.setPoint(3, sf::Vector2f(-50.f, 100.f));
-
-    convex.setFillColor(sf::Color::Black);
-    convex.setOrigin(sf::Vector2f(0.f, 50.f));
-    convex.scale(sf::Vector2f(0.5, 0.5));
-    convex.setPosition(sf::Vector2f(100.f, 100.f));
-    convex.setOutlineColor(sf::Color::White);
-    convex.setOutlineThickness(5.0f);
+    Ship ship;
 
     while (window.isOpen()) {
         // Event handling
@@ -35,14 +22,23 @@ void Asteroids::run()
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
                 window.close();
+            } else if (event.type == sf::Event::Resized) {
+                sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
+                window.setView(sf::View(visibleArea));
             }
         }
 
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
+            ship.turn(SHIP_TURN_RIGHT);
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
+            ship.turn(SHIP_TURN_LEFT);
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
+            ship.accelerate();
+        ship.update();
+
         window.clear(sf::Color::Black);
 
-        convex.rotate(1.f);
-
-        window.draw(convex);
+        window.draw(ship.getDrawableShape());
 
         window.display();
     }

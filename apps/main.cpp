@@ -2,5 +2,6 @@
 
 int main()
 {
-    Asteroids::run();
+    Asteroids app;
+    app.run();
 }
