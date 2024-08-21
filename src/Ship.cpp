@@ -1,6 +1,7 @@
 #include <cmath>
 
 #include "Ship.h"
+#include "SFML/System/Vector2.hpp"
 
 Ship::Ship()
 {
@@ -33,14 +34,22 @@ void Ship::update(float deltaTime)
 {
     m_direction += m_angularDisplacement * deltaTime;
 
+    m_position += m_velocity*deltaTime + static_cast<float>(0.5)*m_acceleration*(deltaTime*deltaTime);
+    m_velocity += m_acceleration*deltaTime;
+    m_velocity *= 1 - m_shipDrag*deltaTime;
+
     m_shape.setPosition(m_position);
+    // we need to convert the direction from radians to degrees
     m_shape.setRotation(m_direction * 180 / M_PI);
 
     m_angularDisplacement = 0.f;
+    m_acceleration = sf::Vector2f(0.f, 0.f);
 }
 
 void Ship::accelerate()
 {
+    m_acceleration.x = std::sin(m_direction) * m_shipThrust;
+    m_acceleration.y = -std::cos(m_direction) * m_shipThrust;
 }
 
 void Ship::turn(int direction)

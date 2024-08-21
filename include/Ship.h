@@ -46,11 +46,12 @@ private:
     /**
     *   Angular velocity of the ship, this indicates how much the angle of the ship will change in a second.
     */
-    const float m_angularVelocity = 3.14f;
+    const float m_angularVelocity = 6.28f;
 
     sf::Vector2f m_position = sf::Vector2f(480.f, 270.f);
     sf::Vector2f m_velocity = sf::Vector2f(0.f, 0.f);
     sf::Vector2f m_acceleration = sf::Vector2f(0.f, 0.f);
 
-    const float m_shipThrust = 1.f;
+    const float m_shipThrust = 1000.f;
+    const float m_shipDrag = 0.9f;
 };
