@@ -4,19 +4,25 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Keyboard.hpp>
 
-#include "Asteroids.h"
 #include "SFML/Graphics/Rect.hpp"
 #include "SFML/Graphics/View.hpp"
+#include "SFML/System/Clock.hpp"
+#include "SFML/System/Time.hpp"
+
+#include "Asteroids.h"
+#include "SFML/Window/WindowStyle.hpp"
 #include "Ship.h"
 
 void Asteroids::run()
 {
-    sf::RenderWindow window = sf::RenderWindow { { 960u, 540u }, "Asteroids" };
+    sf::RenderWindow window = sf::RenderWindow { { 960u, 540u }, "Asteroids", sf::Style::Close | sf::Style::Titlebar };
     window.setFramerateLimit(144);
 
     Ship ship;
-
+    sf::Clock deltaClock;
     while (window.isOpen()) {
+        sf::Time deltaTime = deltaClock.restart();
+
         // Event handling
         sf::Event event;
         while (window.pollEvent(event)) {
@@ -34,7 +40,8 @@ void Asteroids::run()
             ship.turn(SHIP_TURN_LEFT);
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
             ship.accelerate();
-        ship.update();
+
+        ship.update(deltaTime.asSeconds());
 
         window.clear(sf::Color::Black);
 
