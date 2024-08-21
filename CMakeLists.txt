@@ -19,6 +19,11 @@ FetchContent_Declare(Catch2
   GIT_TAG        v3.4.0)
 FetchContent_MakeAvailable(Catch2)
 
+find_package(Doxygen REQUIRED dot OPTIONAL_COMPONENTS mscgen dia)
+if(Doxygen_FOUND)
+    add_subdirectory(docs)
+endif()
+
 # Compiling project
 add_subdirectory(apps)
 add_subdirectory(src)
